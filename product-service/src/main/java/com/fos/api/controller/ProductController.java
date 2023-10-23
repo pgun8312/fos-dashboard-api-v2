@@ -53,7 +53,7 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProduct(@PathVariable("productId") Integer productId){
         Product product = productService.getProductById(productId);
 
-        //checking wether prodcut is exist or not
+        //checking whether product is existed or not
         if(product != null ) {
             ProductResponse response = convertToResponse(product);
             return ResponseEntity.status(HttpStatus.OK).body(response);
