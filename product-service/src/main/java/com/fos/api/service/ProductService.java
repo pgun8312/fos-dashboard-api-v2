@@ -8,6 +8,7 @@ import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
 import com.fos.api.model.response.ProductResponse;
 import com.fos.api.repository.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -27,6 +29,7 @@ public class ProductService {
 
     public Product createProduct(ProductRequest request){
         if(productRepository.existsByName(request.getProductName())) {
+            log.warn("Product creation failed due to duplicate product name: {}", request.getProductName());
             throw new ValidationFailureException(ErrorInfo.DUPLICATE_PRODUCT_NAME);
         }
 
@@ -38,19 +41,24 @@ public class ProductService {
                 "available"
             );
 
+            log.info("Product created with name: {}", product.getName());
             productRepository.save(product);
             return product;
         }
         catch (Exception e){
+            log.error("Product creation failed: {}", e.getMessage());
             throw new ProcessFailureException(ErrorInfo.PROCESS_FAILURE, "Cannot create the product");
         }
     }
 
     public List<Product> getAllProduct(){
         try {
-            return productRepository.findAll();
+            List<Product> products = productRepository.findAll();
+            log.info("Retrieved {} products from the database", products.size());
+            return products;
         }
         catch (Exception e) {
+            log.error("Failed to get the product list: {}", e.getMessage());
             throw new ProcessFailureException(ErrorInfo.PROCESS_FAILURE, "Cannot get the product list");
         }
     }
@@ -61,9 +69,10 @@ public class ProductService {
         Optional<Product> existingProduct = productRepository.findById(productId);
 
         if (existingProduct.isPresent()) {
+            log.info("Retrieved product with ID: {}", productId);
             return existingProduct.get();
         }
-
+        log.warn("Failed to retrieve product with ID: {}", productId);
         throw new ValidationFailureException(ErrorInfo.INVALID_PRODUCT_ID);
 
     }
@@ -72,9 +81,11 @@ public class ProductService {
 
         Optional<Product> product = productRepository.findById(productId);
         if(!product.isPresent()) {
+            log.warn("Failed to update product with ID {} because it doesn't exist", productId);
             throw new ValidationFailureException(ErrorInfo.INVALID_PRODUCT_ID);
         }
         else if(productRepository.existsByNameAndIdNot(request.getProductName(), productId)) {
+            log.warn("Failed to update product with ID {} due to duplicate product name: {}", productId, request.getProductName());
             throw new ValidationFailureException(ErrorInfo.DUPLICATE_PRODUCT_NAME);
         }
         else {
@@ -84,8 +95,10 @@ public class ProductService {
                 newProduct.setDescription(request.getDescription());
                 newProduct.setPrice(request.getPrice());
                 productRepository.save(newProduct);
+                log.info("Updated product with ID: {}", productId);
                 return newProduct;
             } catch (Exception ex) {
+                log.error("Product update failed for ID: {} , message: {}", productId, ex.getMessage());
                 throw new ProcessFailureException(ErrorInfo.PROCESS_FAILURE);
             }
         }
@@ -96,6 +109,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(productId);
 
         if(!product.isPresent()) {
+            log.warn("Failed to delete product with ID {} because it doesn't exist", productId);
             throw new ValidationFailureException(ErrorInfo.INVALID_PRODUCT_ID);
         }
         else{
@@ -103,10 +117,11 @@ public class ProductService {
                 Product deletedproduct = product.get();
                 deletedproduct.setStatus("notAvailable");
                 productRepository.save(deletedproduct);
-
+                log.info("Deleted product with ID: {}", productId);
                 return deletedproduct;
             }
             catch (Exception ex) {
+                log.error("Product deletion failed for ID: {}, message: {}", productId, ex.getMessage());
                 throw new ProcessFailureException(ErrorInfo.PROCESS_FAILURE);
             }
         }

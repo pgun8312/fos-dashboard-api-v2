@@ -1,5 +1,6 @@
 package com.fos.api.model.request;
 
+import com.fos.api.common.Constants;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderRequest {
 
-    private String orderStatus;
+    private Constants.OrderStatus orderStatus;
     @NotNull
     @Size(min = 1, message = "At Least one item should be present")
     private List<OrderItemRequest> orderItems;
     @NotNull
     private double totalAmount;
+    @NotNull(message = "User Id is required")
+    private Integer userId;
 }
