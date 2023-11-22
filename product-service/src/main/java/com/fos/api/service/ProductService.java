@@ -1,11 +1,13 @@
 package com.fos.api.service;
 
+import com.fos.api.common.Constants;
 import com.fos.api.controller.ProductController;
 import com.fos.api.exception.ErrorInfo;
 import com.fos.api.exception.ProcessFailureException;
 import com.fos.api.exception.ValidationFailureException;
 import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
+import com.fos.api.model.request.ProductUpdateRequest;
 import com.fos.api.model.response.ProductResponse;
 import com.fos.api.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +36,17 @@ public class ProductService {
         }
 
         try{
+            // Convert the string category to enum using getCategoryEnum method
+            Constants.ProductCategory productCategory = request.getCategoryEnum();
+
             Product product = new Product(
                 request.getProductName(),
                 request.getDescription(),
                 request.getPrice(),
-                "available"
+                "available",
+                request.getImage(),
+                productCategory,
+                request.getRemainingQuantity()
             );
 
             log.info("Product created with name: {}", product.getName());
@@ -77,7 +85,7 @@ public class ProductService {
 
     }
 
-    public Product updateProduct(Integer productId, ProductRequest request) {
+    public Product updateProduct(Integer productId, ProductUpdateRequest request) {
 
         Optional<Product> product = productRepository.findById(productId);
         if(!product.isPresent()) {
@@ -94,6 +102,7 @@ public class ProductService {
                 newProduct.setName(request.getProductName());
                 newProduct.setDescription(request.getDescription());
                 newProduct.setPrice(request.getPrice());
+                newProduct.setStatus(request.getStatus());
                 productRepository.save(newProduct);
                 log.info("Updated product with ID: {}", productId);
                 return newProduct;

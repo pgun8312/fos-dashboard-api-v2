@@ -12,8 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemRequest {
-    @NotBlank(message = "productId is Required")
+    @NotBlank(message = "ProductId is Required")
     private Integer productId;
+    @NotBlank(message = "Product name is Required")
+    private String productName;
     @NotBlank(message = "Unit Price is Required")
     private Double unitPrice;
     @NotBlank(message = "Quantity is Required")

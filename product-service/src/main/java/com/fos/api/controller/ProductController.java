@@ -2,6 +2,7 @@ package com.fos.api.controller;
 
 import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
+import com.fos.api.model.request.ProductUpdateRequest;
 import com.fos.api.model.response.ProductResponse;
 import com.fos.api.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,7 +84,7 @@ public class ProductController {
             description = "Update a specific product by its ID with the provided details"
     )
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") Integer productId,@Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") Integer productId,@Valid @RequestBody ProductUpdateRequest request) {
         Product product = productService.updateProduct(productId,request);
         if(product != null) {
            ProductResponse response = convertToResponse(product);
@@ -116,6 +117,9 @@ public class ProductController {
         response.setDescription(product.getDescription());
         response.setPrice(product.getPrice());
         response.setStatus(product.getStatus());
+        response.setImage(product.getImage());
+        response.setCategory(product.getCategory());
+        response.setRemainingQuantity(product.getRemainingQuantity());
         return response;
     }
 

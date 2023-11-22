@@ -1,5 +1,6 @@
 package com.fos.api.model.response;
 
+import com.fos.api.common.Constants;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -19,6 +20,34 @@ public class ProductResponse {
     private Double price;
     private String status;
 
+    public Integer getRemainingQuantity() {
+        return remainingQuantity;
+    }
+
+    public void setRemainingQuantity(Integer remainingQuantity) {
+        this.remainingQuantity = remainingQuantity;
+    }
+
+    private Integer remainingQuantity;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Constants.ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(Constants.ProductCategory category) {
+        this.category = category;
+    }
+
+    private String image;
+    private Constants.ProductCategory category;
 
     public String getName() {
         return name;

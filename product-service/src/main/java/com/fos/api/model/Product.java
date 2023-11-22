@@ -1,6 +1,8 @@
 package com.fos.api.model;
 
+import com.fos.api.common.Constants;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
@@ -10,11 +12,14 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Product {
 
-    public Product(String name, String description, double price, String status) {
+    public Product(String name, String description, double price, String status, String image, Constants.ProductCategory category, Integer remainingQuantity) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.status = status;
+        this.image = image;
+        this.category = category;
+        this.remainingQuantity = remainingQuantity;
     }
 
     @Id
@@ -44,6 +49,38 @@ public class Product {
 
     @Column(name = "STATUS")
     private String status;
+    @Column(name = "IMAGE")
+    String image;
+    @Column(name = "REMAINING_QUANTITY")
+    Integer remainingQuantity;
+    @Column(name = "CATEGORY")
+    Constants.ProductCategory category;
+
+    public Integer getRemainingQuantity() {
+        return remainingQuantity;
+    }
+
+    public void setRemainingQuantity(Integer remainingQuantity) {
+        this.remainingQuantity = remainingQuantity;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Constants.ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(Constants.ProductCategory category) {
+        this.category = category;
+    }
+
+
 
     public Integer getId() {
         return id;

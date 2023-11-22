@@ -1,13 +1,11 @@
 package com.fos.api.handler;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fos.api.exception.ErrorInfo;
 import com.fos.api.exception.ProcessFailureException;
 import com.fos.api.exception.ValidationFailureException;
 import com.fos.api.model.response.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,13 +22,14 @@ public class ApiExceptionHandler {
 
 
         //Mapping the ErrorCode to the HTTP status code(Basically managing the status code for each Validation Exception)
-        if(ex.getErrorCode() == ErrorInfo.DUPLICATE_PRODUCT_NAME.getId()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getErrorInfo()));
-        }
-        else if(ex.getErrorCode() == ErrorInfo.INVALID_PRODUCT_ID.getId()){
+
+        if(ex.getErrorCode() == ErrorInfo.USER_ALREADY_EXISTS.getId()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getErrorInfo()));
         }
         else if(ex.getErrorCode() == ErrorInfo.REQUEST_CONSTRAINT_VIOLATION.getId()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getErrorInfo()));
+        }
+        else if(ex.getErrorCode() == ErrorInfo.USER_NAME_EXISTS.getId()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getErrorInfo()));
         }
         else {
@@ -62,18 +61,6 @@ public class ApiExceptionHandler {
                 ErrorInfo.VALIDATION_FAILURE.getId(),
                 errorMessage
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ResponseEntity<ExceptionResponse> handleInvalidFormatException(HttpMessageNotReadableException ex) {
-
-
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                ErrorInfo.VALIDATION_FAILURE.getId(),
-                ErrorInfo.VALIDATION_FAILURE.getMessage()
-        );
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 

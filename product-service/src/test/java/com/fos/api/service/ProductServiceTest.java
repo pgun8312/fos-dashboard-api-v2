@@ -4,6 +4,7 @@ import com.fos.api.exception.ProcessFailureException;
 import com.fos.api.exception.ValidationFailureException;
 import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
+import com.fos.api.model.request.ProductUpdateRequest;
 import com.fos.api.model.response.ProductResponse;
 import com.fos.api.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -139,65 +140,67 @@ public class ProductServiceTest {
     @Test
     public void updateProduct_shouldThrowValidationFailureException_WhenProductDoesNotExist() {
         int productId = 1;
-        ProductRequest productRequest = getProductRequest("Chicken", "Fresh Chicken meat", 5.66);
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken meat", 5.66,"available");
 
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         assertThrows(ValidationFailureException.class, () -> {
-            productService.updateProduct(productId,productRequest);
+            productService.updateProduct(productId,productUpdateRequest);
         });
     }
 
     @Test
     public void updateProduct_shouldThrowValidationFailureException_When_ProductIdExists_DuplicateName () {
         int productId = 1;
-        ProductRequest productRequest = getProductRequest("Chicken", "Fresh Chicken meat", 5.66);
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken meat", 5.66,"available");
         Product product = getProduct("Chicken", "Fresh Chicken meat", 5.66, "available");
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(productRepository.existsByNameAndIdNot(productRequest.getProductName(), productId)).thenReturn(true);
+        when(productRepository.existsByNameAndIdNot(productUpdateRequest.getProductName(), productId)).thenReturn(true);
 
         assertThrows(ValidationFailureException.class, () -> {
-            productService.updateProduct(productId,productRequest);
+            productService.updateProduct(productId,productUpdateRequest);
         });
     }
     @Test
     public void updateProduct_shouldThrowProcessFailureException_WhenRuntimeExceptionOccurs () {
         int productId = 1;
-        ProductRequest productRequest = getProductRequest("Chicken", "Fresh Chicken meat", 5.66);
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken meat", 5.66,"available");
         Product product = getProduct("Chicken", "Fresh Chicken meat", 5.66, "available");
 
         // Mock the behavior of productRepository.findById
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         // Mock the behavior of productRepository.existsByNameAndIdNot
-        when(productRepository.existsByNameAndIdNot(productRequest.getProductName(), productId)).thenReturn(false);
+        when(productRepository.existsByNameAndIdNot(productUpdateRequest.getProductName(), productId)).thenReturn(false);
         // Mock the behavior of productRepository.save
         when(productRepository.save(product)).thenThrow(new RuntimeException("Unexpected Exception"));
 
         assertThrows(ProcessFailureException.class, () -> {
-            productService.updateProduct(productId,productRequest);
+            productService.updateProduct(productId,productUpdateRequest);
         });
     }
 
     @Test
     public void updateProduct_shouldUpdateProduct_WhenValidProductIdAndNoDuplicateName() {
         int productId = 1;
-        ProductRequest productRequest = getProductRequest("Updated Chicken", "Updated Fresh Chicken meat", 6.66);
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken meat", 5.66,"available");
+
         Product existingProduct = getProduct("Chicken", "Fresh Chicken meat", 5.66, "available");
 
         // Mock the behavior of productRepository.findById
         when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
         // Mock the behavior of productRepository.existsByNameAndIdNot
-        when(productRepository.existsByNameAndIdNot(productRequest.getProductName(), productId)).thenReturn(false);
+        when(productRepository.existsByNameAndIdNot(productUpdateRequest.getProductName(), productId)).thenReturn(false);
 
 
-        Product updatedProduct = productService.updateProduct(productId,productRequest);
+        Product updatedProduct = productService.updateProduct(productId,productUpdateRequest);
 
         // Assert that the product was updated successfully
         assertNotNull(updatedProduct);
-        assertEquals(productRequest.getProductName(), updatedProduct.getName());
-        assertEquals(productRequest.getDescription(), updatedProduct.getDescription());
-        assertEquals(productRequest.getPrice(), updatedProduct.getPrice());
+        assertEquals(productUpdateRequest.getProductName(), updatedProduct.getName());
+        assertEquals(productUpdateRequest.getDescription(), updatedProduct.getDescription());
+        assertEquals(productUpdateRequest.getPrice(), updatedProduct.getPrice());
+        assertEquals(productUpdateRequest.getStatus(), updatedProduct.getStatus());
     }
 
     @Test
@@ -251,6 +254,15 @@ public class ProductServiceTest {
         productRequest.setPrice(price);
 
         return productRequest;
+
+    }
+    private ProductUpdateRequest getProductUpdateRequest(String productName, String description, Double price, String status) {
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        productUpdateRequest.setProductName(productName);
+        productUpdateRequest.setDescription(description);
+        productUpdateRequest.setPrice(price);
+        productUpdateRequest.setStatus(status);
+        return productUpdateRequest;
 
     }
 

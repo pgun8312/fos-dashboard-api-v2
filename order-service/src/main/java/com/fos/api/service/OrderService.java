@@ -71,6 +71,7 @@ public class OrderService {
         orderRequest.getOrderItems().forEach((requestOrderItem) -> {
             OrderItem orderItem = new OrderItem();
             orderItem.setProductId(requestOrderItem.getProductId());
+            orderItem.setProductName(requestOrderItem.getProductName());
             orderItem.setUnitPrice(requestOrderItem.getUnitPrice());
             orderItem.setQuantity(requestOrderItem.getQuantity());
 

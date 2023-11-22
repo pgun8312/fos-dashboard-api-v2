@@ -3,6 +3,7 @@ package com.fos.api.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
+import com.fos.api.model.request.ProductUpdateRequest;
 import com.fos.api.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -119,9 +120,9 @@ class ProductServiceIntegrationTests{
     void shouldUpdateProduct() throws Exception {
 
         //create a product request
-        ProductRequest productRequest = getProductRequest("Chicken","Fresh Chicken", 10.11 );
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken", 10.11,"available");
 
-        String productRequestString = objectMapper.writeValueAsString(productRequest);
+        String productRequestString = objectMapper.writeValueAsString(productUpdateRequest);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/products/" + createdProduct.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +130,9 @@ class ProductServiceIntegrationTests{
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Chicken"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Fresh Chicken"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(10.11));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(10.11))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("available"));
+        ;
 
     }
 
@@ -149,6 +152,15 @@ class ProductServiceIntegrationTests{
         productRequest.setPrice(price);
 
         return productRequest;
+
+    }
+    private ProductUpdateRequest getProductUpdateRequest(String productName, String description, Double price, String status) {
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
+        productUpdateRequest.setProductName(productName);
+        productUpdateRequest.setDescription(description);
+        productUpdateRequest.setPrice(price);
+        productUpdateRequest.setStatus(status);
+        return productUpdateRequest;
 
     }
 

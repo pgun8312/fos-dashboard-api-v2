@@ -18,6 +18,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer productId;
+    private String productName;
     private Double unitPrice;
     private Double quantity;
     @JsonIgnore
