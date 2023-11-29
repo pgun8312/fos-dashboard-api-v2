@@ -198,4 +198,9 @@ public class UserService {
         log.info("User profile Updated successfully for user: {}", existingUser.getUserName());
         return updatedUserProfile;
     }
+
+    public Constants.UserRole getUserRoleByUserSub(String userSub) {
+        Optional<User> user = userRepository.findByUserSub(userSub);
+        return user.map(User::getRole).orElse(null);
+    }
 }

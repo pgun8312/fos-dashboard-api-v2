@@ -1,5 +1,6 @@
 package com.fos.api.controller;
 
+import com.fos.api.common.Constants;
 import com.fos.api.model.User;
 import com.fos.api.model.UserProfile;
 import com.fos.api.model.request.UserCreateRequest;
@@ -97,6 +98,13 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(userProfileToUserProfileResponse(userProfile));
 
+    }
+
+    @GetMapping("/user-role/{userSub}")
+    public ResponseEntity<String> getUserRoleByUserSub(@NotNull @PathVariable("userSub") String userSub) {
+        Constants.UserRole userRole = userService.getUserRoleByUserSub(userSub);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userRole.toString());
     }
 
     private UserProfileResponse userProfileToUserProfileResponse(UserProfile newUserProfile) {

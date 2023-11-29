@@ -98,11 +98,17 @@ public class ProductService {
         }
         else {
             try {
+
+                Constants.ProductCategory productCategory = request.getCategoryEnum();
+
                 Product newProduct = product.get();
                 newProduct.setName(request.getProductName());
                 newProduct.setDescription(request.getDescription());
                 newProduct.setPrice(request.getPrice());
                 newProduct.setStatus(request.getStatus());
+                newProduct.setImage(request.getImage());
+                newProduct.setCategory(productCategory);
+                newProduct.setRemainingQuantity(request.getRemainingQuantity());
                 productRepository.save(newProduct);
                 log.info("Updated product with ID: {}", productId);
                 return newProduct;
