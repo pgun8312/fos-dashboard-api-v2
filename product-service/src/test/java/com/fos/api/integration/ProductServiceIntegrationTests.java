@@ -1,6 +1,7 @@
 package com.fos.api.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fos.api.common.Constants;
 import com.fos.api.model.Product;
 import com.fos.api.model.request.ProductRequest;
 import com.fos.api.model.request.ProductUpdateRequest;
@@ -54,7 +55,7 @@ class ProductServiceIntegrationTests{
     void setUp() {
         // Set up data for the tests
         //create the product for testing
-        Product product = getProduct("Chicken", "Fresh Chicken", 5.66, "available");
+        Product product = getProduct("Chicken", "Fresh Chicken", 5.66, "available", "image_1", Constants.ProductCategory.CHICKEN, 50);
         createdProduct = productRepository.save(product);
     }
 
@@ -76,7 +77,7 @@ class ProductServiceIntegrationTests{
     //
     @Test
     void shouldCreateProduct() throws Exception {
-        ProductRequest productRequest = getProductRequest("Chicken meat","Fresh Chicken", 5.66 );
+        ProductRequest productRequest = getProductRequest("Chicken meat","Fresh Chicken", 5.66, "image_1", "CHICKEN", 50);
 
         String productRequestString = objectMapper.writeValueAsString(productRequest);
 
@@ -120,7 +121,7 @@ class ProductServiceIntegrationTests{
     void shouldUpdateProduct() throws Exception {
 
         //create a product request
-        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken", 10.11,"available");
+        ProductUpdateRequest productUpdateRequest = getProductUpdateRequest("Chicken", "Fresh Chicken", 10.11,"available","image_1", "CHICKEN", 50);
 
         String productRequestString = objectMapper.writeValueAsString(productUpdateRequest);
 
@@ -145,32 +146,42 @@ class ProductServiceIntegrationTests{
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("notAvailable"));
     }
 
-    private ProductRequest getProductRequest(String productName, String description, Double price) {
+    private ProductRequest getProductRequest(String productName, String description, Double price, String image, String category, Integer remainingQuantity) {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName(productName);
         productRequest.setDescription(description);
         productRequest.setPrice(price);
+        productRequest.setCategory(category);
+        productRequest.setImage(image);
+        productRequest.setRemainingQuantity(remainingQuantity);
 
         return productRequest;
 
     }
-    private ProductUpdateRequest getProductUpdateRequest(String productName, String description, Double price, String status) {
+    private ProductUpdateRequest getProductUpdateRequest(String productName, String description, Double price, String status, String image, String category, Integer remainingQuantity) {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest();
         productUpdateRequest.setProductName(productName);
         productUpdateRequest.setDescription(description);
         productUpdateRequest.setPrice(price);
         productUpdateRequest.setStatus(status);
+        productUpdateRequest.setImage(image);
+        productUpdateRequest.setCategory(category);
+        productUpdateRequest.setRemainingQuantity(remainingQuantity);
+
         return productUpdateRequest;
 
     }
 
 
-    private Product getProduct(String productName, String description, Double price, String status) {
+    private Product getProduct(String productName, String description, Double price, String status, String image, Constants.ProductCategory category, Integer remainingQuantity) {
         Product product = new Product();
         product.setName(productName);
         product.setDescription(description);
         product.setPrice(price);
         product.setStatus(status);
+        product.setCategory(category);
+        product.setImage(image);
+        product.setRemainingQuantity(remainingQuantity);
 
         return product;
 
