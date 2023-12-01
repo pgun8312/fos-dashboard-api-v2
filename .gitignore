@@ -39,7 +39,9 @@ build/
 .DS_Store
 
 #sonar-ananalysis
-.scannerwork
+./order-service/.scannerwork
+./product-service/.scannerwork
+./user-service/.scannerwork
 sonarqube/extensions
 sonarqube/data
 sonarqube/logs

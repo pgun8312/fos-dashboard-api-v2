@@ -2,5 +2,5 @@ projectKey=fos-order-service
 serverUrl=http://localhost:8090
 serverVersion=9.9.2.77730
 dashboardUrl=http://localhost:8090/dashboard?id=fos-order-service
-ceTaskId=AYwkk-oahRcVV39Lnnj6
-ceTaskUrl=http://localhost:8090/api/ce/task?id=AYwkk-oahRcVV39Lnnj6
+ceTaskId=AYwlqOxDAuHFO7EipHhJ
+ceTaskUrl=http://localhost:8090/api/ce/task?id=AYwlqOxDAuHFO7EipHhJ
