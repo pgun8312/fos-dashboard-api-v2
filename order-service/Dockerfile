@@ -12,3 +12,4 @@ COPY target/*.jar app.jar
 
 # Set entry point
 ENTRYPOINT ["java", "-jar", "/app.jar"]
+
