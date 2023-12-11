@@ -45,3 +45,5 @@ build/
 sonarqube/extensions
 sonarqube/data
 sonarqube/logs
+
+*.env

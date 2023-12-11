@@ -2,5 +2,5 @@ projectKey=fos-product-service
 serverUrl=http://localhost:8090
 serverVersion=9.9.2.77730
 dashboardUrl=http://localhost:8090/dashboard?id=fos-product-service
-ceTaskId=AYwlp9FWAuHFO7EipHhH
-ceTaskUrl=http://localhost:8090/api/ce/task?id=AYwlp9FWAuHFO7EipHhH
+ceTaskId=AYwlvsAjAuHFO7EipHhN
+ceTaskUrl=http://localhost:8090/api/ce/task?id=AYwlvsAjAuHFO7EipHhN

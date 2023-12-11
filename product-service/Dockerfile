@@ -1,6 +1,7 @@
 # Use the official Maven image as the base image
 FROM maven:3.8.4-openjdk-17
 
+
 # Set maintainer label
 LABEL maintainer="Pasindu_Gunawardana"
 

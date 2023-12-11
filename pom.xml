@@ -28,10 +28,14 @@
 
         <!-- SonarQube properties -->
         <sonar.projectKey>fos-dashboard-api</sonar.projectKey>
-        <sonar.host.url>http://localhost:8090</sonar.host.url>
         <!--suppress UnresolvedMavenProperty -->
-        <sonar.login>${SONAR_API_KEY}</sonar.login>
-        <!--test report file location for each modules specified in here -->
+        <sonar.host.url>${SONAR_HOST_URL}</sonar.host.url>
+        <!--suppress UnresolvedMavenProperty -->
+        <!-- Change this because of running on a container -->
+        <sonar.login>${SONAR_LOGIN}</sonar.login>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.password>${SONAR_PASSWORD}</sonar.password>
+        <!--test report file location for each module specified in here -->
         <sonar.jacoco.reportPaths>product-service/target/site/jacoco/jacoco.xml,order-service/target/site/jacoco/jacoco.xml,user-service/target/site/jacoco/jacoco.xml</sonar.jacoco.reportPaths>
     </properties>
 
@@ -60,11 +64,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.8.0.2131</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
