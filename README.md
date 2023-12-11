@@ -19,9 +19,7 @@ Before you begin, ensure you have the following installed:
 Environment Variables
 
 Create a .env file in the root of the project with the necessary environment variables. Sample content:
-
-env
-Copy code
+```
 # Database Configuration
 ORDER_DB_URL=your-db-host-url
 ORDER_DB_USERNAME=your-db-username
@@ -43,13 +41,14 @@ SONAR_HOST_URL=${HOST_URL}:8090
 SONAR_LOGIN=your-sonar-login-user-name
 SONAR_PASSWORD=your-sonar-password
 
+```
 Note: This file is not versioned in the repository for security reasons.
 
 ## Build and Start Microservices
 
 Run the following commands to build and start the microservices:
 
-docker-compose up --build
+`docker-compose up --build`
 
 This command will build the Docker images for each microservice and start the containers.
 
@@ -64,14 +63,14 @@ Stopping the Application
 
 # To stop the application and remove the containers, run:
 
-docker-compose down
+`docker-compose down`
 
 # TO  rebuild the application and run
 
-docker-compose up --build
+`docker-compose up --build`
 
 # To run mvn Commands:
-
+```
 cd /app
 mvn <your-command>
 
@@ -106,7 +105,7 @@ Running SonarQube Analysis
 Update the credentials in the .env file and run the following command to analyze your project:
 
 mvn sonar:sonar
-
+```
 
 Remember to replace placeholders like `your-username`, `your-repo`, `your-db-host-url`, `your-db-username`, `your-password`, `your-machine-ipv4-address`, `your-sonar-login-user-name`, and `your-sonar-password` with your actual values.
 
