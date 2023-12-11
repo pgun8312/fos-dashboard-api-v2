@@ -7,6 +7,9 @@ LABEL maintainer="Pasindu_Gunawardana"
 # Explicitly set MAVEN_HOME
 ENV MAVEN_HOME /usr/share/maven
 
+# Set the timezone to India Standard Time
+ENV TZ Asia/Kolkata
+
 # Copy the JAR file
 COPY target/*.jar app.jar
 
